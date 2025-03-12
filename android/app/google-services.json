@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "883692492654",
+    "project_id": "my-notes-308aa",
+    "storage_bucket": "my-notes-308aa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883692492654:android:b30d100c0b885d5dfc537f",
+        "android_client_info": {
+          "package_name": "com.makingstuffup.mynotes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9aVeTTOvJrYhla3T7gNGJ5i2stNyTxKY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
