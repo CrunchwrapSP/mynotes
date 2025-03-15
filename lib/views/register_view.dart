@@ -1,16 +1,16 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:developer' as devtools show log;
 
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+class RegisterView extends StatefulWidget {
+  const RegisterView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<RegisterView> createState() => _RegisterViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
-  
+class _RegisterViewState extends State<RegisterView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
 
@@ -32,7 +32,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login')
+        title: const Text('Register')
       ),
       body: Column(
         children: [
@@ -56,35 +56,37 @@ class _LoginViewState extends State<LoginView> {
           ),
           TextButton(
             onPressed: () async {
+              
               final email = _email.text;
               final password = _password.text;
-      
-              try { 
-                final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+              
+              try{
+                final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                 email: email, 
                 password: password
                 );
-                print(userCredential);
-              }  on FirebaseAuthException catch (e) {
-                if (e.code == 'user-not-found') { 
-                  print('User not found');
-                } else if (e.code == 'wrong-password') {
-                  print('Wrong password');
+              devtools.log(userCredential.toString());
+              } on FirebaseAuthException catch (e) {
+                if (e.code == 'weak-password'){
+                  devtools.log('weak password');
+                } else if (e.code == 'email-already-in-use') {
+                  devtools.log('email already in use');
+                } else if (e.code == 'invalid-email') {
+                  devtools.log('invalid email');
                 }
-      
               }
+              
             }, 
-            child: const Text('Login'),
+            child: const Text('Register'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: (){
               Navigator.of(context).pushNamedAndRemoveUntil(
-                '/register/', 
+                '/login/', 
                 (route) => false,
               );
             }, 
-            child: const Text("Don't have an account? Register here!"),
-          )
+            child: const Text('Have an account? Login here!'))
         ],
       ),
     );
