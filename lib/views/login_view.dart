@@ -100,7 +100,7 @@ class _LoginViewState extends State<LoginView> {
                       context, 
                       e.toString(),
                     );
-                  }
+                }
               }
             }, 
             child: const Text('Login'),
