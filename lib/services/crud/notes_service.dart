@@ -14,7 +14,7 @@ class NotesService {
   NotesService._sharedInstance() {
     _notesStreamController = StreamController<List<DatabaseNote>>.broadcast(
       onListen: () {
-        _notesStreamController.sink.add(_notes);
+        _notesStreamController.sink.add(_notes.toList());
       },
     );
   }
@@ -58,7 +58,7 @@ class NotesService {
     final updatesCount = await db.update(noteTable, {
       textColumn: text,
       isSyncedWithCloudColumn: 0,
-    });
+    }, where: 'id =?', whereArgs: [note.id]);
 
     if (updatesCount == 0) {
       throw CouldNotUpdateNote();
@@ -75,7 +75,6 @@ class NotesService {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final notes = await db.query(noteTable);
-
     return notes.map((noteRow) => DatabaseNote.fromRow(noteRow));
   }
 
@@ -230,6 +229,8 @@ class NotesService {
       await db.execute(createUserTable);
       //create note table
       await db.execute(createNoteTable);
+      
+      _notes = [];
       await _cacheNotes(); 
     } on MissingPlatformDirectoryException {
       throw UnableToGetDocumentsDirectory();
@@ -296,7 +297,7 @@ class DatabaseNote {
 
   @override
   String toString() =>
-      'Note, ID = $id, userId = $userId, isSyncedwithCloud = $isSyncedWithCloud';
+      'Note, ID = $id, userId = $userId, text = $text, isSyncedwithCloud = $isSyncedWithCloud';
 
   @override
   bool operator ==(covariant DatabaseNote other) => id == other.id;
